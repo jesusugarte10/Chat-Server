@@ -5,7 +5,23 @@
 import socket
 import threading 
 
-host = '127.0.0.1' #localhost
+option = int(input('Enter 1: Ethernet | 2:LocalHost\n'))
+while True:
+    try:
+        if option == 1:
+            host = socket.gethostbyname(socket.gethostname()) #ethernet
+            break
+        elif option == 2:
+            host = socket.gethostbyname('localhost') #localhost
+            break
+        else: 
+	        option = int(input('Enter 1: Ethernet | 2:LocalHost\n'))
+    except:
+	    print('Please enter option in range')
+
+
+print(f'current host address is: {host}')
+
 port = 50842
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

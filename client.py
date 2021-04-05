@@ -5,12 +5,35 @@
 import socket 
 import threading 
 
+option = int(input('Enter 1: Ethernet | 2:LocalHost\n'))
+while True:
+    try:
+        if option == 1:
+            while True:
+                addr = input('Enter ip address\n') #ethernet
+                try:
+                    socket.inet_aton(addr)
+                    host = addr
+                    break
+                except socket.error:
+                    print('Invalid IP')
+            break
+        elif option == 2:
+            host = socket.gethostbyname('localhost') #localhost
+            break
+        else: 
+	        option = int(input('Enter 1: Ethernet | 2:LocalHost\n'))
+    except:
+	    print('Please enter option in range')
+
+print(f'Connected to: {host}')
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((host, 50842))
+
 nickname = input("Choose a nickname: ")
 if nickname == 'admin':
     password = input("Enter password for admin: ")
-
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('127.0.0.1', 50842))
 
 stop_thread = False
 
