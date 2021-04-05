@@ -14,6 +14,9 @@ run client.py afterwards
 Supported admin Commands
 /kick username
 /ban username
+/kill #Kills server and kicks out all users
 
 Supported exit command
 /exit
+
+

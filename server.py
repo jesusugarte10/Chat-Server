@@ -56,7 +56,9 @@ def handle(client):
             #Handle exit situation
             if msg.decode('ascii').startswith('EXIT'):
                 client.send('EXIT'.encode('ascii'))
-                print(f'{nicknames[clients.index(client)]} left the chat')
+                client_to_exit = nicknames[clients.index(client)]
+                for client in clients:
+                    client.send(f'{client_to_exit} left the chat')
 
             #handle command instructions 
             elif msg.decode('ascii').startswith('KICK'):
@@ -75,6 +77,16 @@ def handle(client):
                     print(f'{name_to_ban} was banned!')
                 else:#Making sure server is not exploited
                     client.send('Command was refused!'.encode('ascii'))
+                    
+            elif msg.decode('ascii').startswith('KILL'):
+                if nicknames[clients.index(client)] == 'admin':
+                    for client in clients:
+                        client.send('KILL'.encode('ascii'))
+                        print(f'{nicknames[clients.index(client)]} left the chat')
+                    break
+                else: #Making sure server is not exploited
+                    client.send('Command was refused!'.encode('ascii'))
+
             else:
                 broadcast(message)
 
@@ -89,7 +101,9 @@ def handle(client):
                 break
 
 def receive():
+    
     while True:
+
         #Accept the new connection
         client, address = server.accept()
         print(f"Connected with {str(address)}")

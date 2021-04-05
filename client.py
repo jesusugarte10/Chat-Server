@@ -5,6 +5,8 @@
 import socket 
 import threading 
 
+stop_thread = False
+
 option = int(input('Enter 1: Ethernet | 2:LocalHost\n'))
 while True:
     try:
@@ -35,7 +37,6 @@ nickname = input("Choose a nickname: ")
 if nickname == 'admin':
     password = input("Enter password for admin: ")
 
-stop_thread = False
 
 def receive():
     while True:
@@ -59,6 +60,10 @@ def receive():
                     stop_thread = True
             elif message == 'EXIT':
                 print('Sucessful exit!')
+                client.close()
+                stop_thread = True
+            elif message == 'KILL':
+                print('Admin decided to shut down Service')
                 client.close()
                 stop_thread = True
             else:
@@ -88,6 +93,9 @@ def write():
                     client.send(f'KICK {message[len(nickname)+2+6:]}'.encode('ascii'))
                 elif message[len(nickname)+2:].startswith('/ban'):
                     client.send(f'BAN {message[len(nickname)+2+5:]}'.encode('ascii'))
+                if message[len(nickname)+2:].startswith('/kill'):
+                    client.send(('KILL').encode('ascii'))
+                    break
             else:
                 print("Commands can only be executed by the admin!")
         else:
