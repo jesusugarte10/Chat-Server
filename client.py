@@ -7,27 +7,14 @@ import threading
 
 stop_thread = False
 
-option = int(input('Enter 1: Ethernet | 2:LocalHost\n'))
 while True:
+    host = input('Enter ip address to connect\n') #ethernet
     try:
-        if option == 1:
-            while True:
-                addr = input('Enter ip address\n') #ethernet
-                try:
-                    socket.inet_aton(addr)
-                    host = addr
-                    break
-                except socket.error:
-                    print('Invalid IP')
-            break
-        elif option == 2:
-            host = socket.gethostbyname('localhost') #localhost
-            break
-        else: 
-	        option = int(input('Enter 1: Ethernet | 2:LocalHost\n'))
-    except:
-	    print('Please enter option in range')
-
+        socket.inet_aton(host)
+        break
+    except socket.error:
+        print('Invalid IP')
+                    
 print(f'Connected to: {host}')
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

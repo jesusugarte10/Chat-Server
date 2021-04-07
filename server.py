@@ -4,23 +4,12 @@
 
 import socket
 import threading 
-
-option = int(input('Enter 1: Ethernet | 2:LocalHost\n'))
-while True:
-    try:
-        if option == 1:
-            host = '35.141.86.65' #ethernet
-            break
-        elif option == 2:
-            host = socket.gethostbyname('localhost') #localhost
-            break
-        else: 
-	        option = int(input('Enter 1: Ethernet | 2:LocalHost\n'))
-    except:
-	    print('Please enter option in range')
+import requests
 
 
-print(f'current host address is: {host}')
+host = '0.0.0.0' #ethernet
+address = requests.get('https://api.ipify.org/').text
+print(f'current host address is: {address}')
 
 port = 50842
 
