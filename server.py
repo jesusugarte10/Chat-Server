@@ -22,6 +22,8 @@ nicknames =[]
 
 #Broadcast to all users
 def broadcast(message):
+    message = message.decode('ascii')
+    message = f'{message}\n'.encode('ascii')
     #Broadcasting msg to all clients
     for client in clients:
         client.send(message)
@@ -31,10 +33,10 @@ def kick_user(name):
         name_index = nicknames.index(name)
         client_to_kick = clients[name_index]
         clients.remove(client_to_kick)
-        client_to_kick.send('You were kicked by admin!'.encode('utf-8'))
+        client_to_kick.send('You were kicked by admin!'.encode('ascii'))
         client_to_kick.close()
         nicknames.remove(name)
-        broadcast(f'{name} was kicked by an admin'.encode('utf-8'))
+        broadcast(f'{name} was kicked by an admin'.encode('ascii'))
         print(f'{name} was kicked by the admin')
 
 def handle(client):
@@ -45,7 +47,7 @@ def handle(client):
 
             #Handle exit situation
             if msg.decode('utf-8').startswith('EXIT'):
-                client.send('EXIT'.encode('utf-8'))
+                client.send('EXIT'.encode('ascii'))
                 client_to_exit = nicknames[clients.index(client)]
                 for client in clients:
                     client.send(f'{client_to_exit} left the chat')
@@ -56,7 +58,7 @@ def handle(client):
                     name_to_kick = msg.decode('utf-8')[5:]
                     kick_user(name_to_kick)
                 else: #Making sure server is not exploited
-                    client.send('Command was refused!'.encode('utf-8'))
+                    client.send('Command was refused!'.encode('ascii'))
             #ban command
             elif msg.decode('utf-8').startswith('BAN'):
                 if nicknames[clients.index(client)] == 'admin':
@@ -66,15 +68,15 @@ def handle(client):
                         f.write(f'{name_to_ban}\n')
                     print(f'{name_to_ban} was banned!')
                 else:#Making sure server is not exploited
-                    client.send('Command was refused!'.encode('utf-8'))
+                    client.send('Command was refused!'.encode('ascii'))
             #kill command
             elif msg.decode('utf-8').startswith('KILL'):
                 if nicknames[clients.index(client)] == 'admin':
                     for client in clients:
-                        client.send('KILL'.encode('utf-8'))
+                        client.send('KILL'.encode('ascii'))
                         print(f'{nicknames[clients.index(client)]} left the chat')
                 else:
-                    client.send('Command was refused!'.encode('utf-8'))
+                    client.send('Command was refused!'.encode('ascii'))
 
             else:
                 broadcast(message)
@@ -85,7 +87,7 @@ def handle(client):
                 clients.remove(client)
                 client.close()
                 nickname = nicknames[index]
-                broadcast(f'{nickname} left the chat!'.encode('utf-8'))
+                broadcast(f'{nickname} left the chat!'.encode('ascii'))
                 nicknames.remove(nickname)
                 break
 
@@ -97,26 +99,26 @@ def receive():
         print(f"Connected with {str(address)}")
 
         #Signal requesting username
-        client.send('NICK'.encode('utf-8'))
+        client.send('NICK'.encode('ascii'))
 
-        nickname = client.recv(1024).decode('utf-8')
+        nickname = client.recv(1024).decode('ascii')
 
         with open('bans.txt', 'r') as f:
             bans = f.readlines()
 
         if nickname+'\n' in bans:
-            client.send('BAN'.encode('utf-8'))
+            client.send('BAN'.encode('ascii'))
             client.close()
             continue
 
         #Checking for admin priviledge
         if nickname =='admin':
-            client.send('PASS'.encode('utf-8'))
-            password = client.recv(1024).decode('utf-8')
+            client.send('PASS'.encode('ascii'))
+            password = client.recv(1024).decode('ascii')
 
             #NOT SECURE WAY TO CHECK FOR PASSWORD
             if password != 'adminpass':
-                client.send('REFUSE'.encode('utf-8'))
+                client.send('REFUSE'.encode('ascii'))
                 client.close()
                 continue
 
@@ -125,8 +127,8 @@ def receive():
         
         #Broadcasting all the membes that a member has joined 
         print(f"Nickname of the client is {nickname}!")
-        broadcast(f'{nickname} joined the chat!'.encode('utf-8'))
-        client.send("Connected to the server!".encode('utf-8'))
+        broadcast(f'{nickname} joined the chat!'.encode('ascii'))
+        client.send("Connected to the server!".encode('ascii'))
         
         #Start threading using handle function
         thread = threading.Thread(target=handle , args = (client,))
