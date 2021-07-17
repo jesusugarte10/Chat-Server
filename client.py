@@ -7,13 +7,12 @@ import threading
 
 stop_thread = False
 
-while True:
-    host = input('Enter ip address to connect\n') #ethernet
-    try:
-        socket.inet_aton(host)
-        break
-    except socket.error:
-        print('Invalid IP')
+host = '35.237.108.170'
+try:
+    socket.inet_aton(host)
+except socket.error:
+    print('Invalid IP')
+    quit()
                     
 print(f'Connected to: {host}')
 
@@ -31,14 +30,14 @@ def receive():
         if stop_thread:
             break
         try:
-            message = client.recv(1024).decode('utf-8')
+            message = client.recv(1024).decode('ascii')
 
             if message == 'NICK':
-                client.send(nickname.encode('utf-8'))
-                next_message = client.recv(1024).decode('utf-8')
+                client.send(nickname.encode('ascii'))
+                next_message = client.recv(1024).decode('ascii')
                 if next_message == 'PASS':
-                    client.send(password.encode('utf-8'))
-                    if client.recv(1024).decode('utf-8') == 'REFUSE':
+                    client.send(password.encode('ascii'))
+                    if client.recv(1024).decode('ascii') == 'REFUSE':
                         print("Connection was  refused! Wrong Password!")
                         stop_thread = True
                 elif next_message == 'BAN':
@@ -72,21 +71,21 @@ def write():
         if message[len(nickname)+2:].startswith('/'):
             #handle exit situation
             if message[len(nickname)+2:].startswith('/exit'):
-                client.send(f'EXIT'.encode('utf-8'))
+                client.send(f'EXIT'.encode('ascii'))
                 break
             #Handle username commands
             elif nickname == 'admin':
                 if message[len(nickname)+2:].startswith('/kick'):
-                    client.send(f'KICK {message[len(nickname)+2+6:]}'.encode('utf-8'))
+                    client.send(f'KICK {message[len(nickname)+2+6:]}'.encode('ascii'))
                 elif message[len(nickname)+2:].startswith('/ban'):
-                    client.send(f'BAN {message[len(nickname)+2+5:]}'.encode('utf-8'))
+                    client.send(f'BAN {message[len(nickname)+2+5:]}'.encode('ascii'))
                 if message[len(nickname)+2:].startswith('/kill'):
-                    client.send(('KILL').encode('utf-8'))
+                    client.send(('KILL').encode('ascii'))
                     break
             else:
                 print("Commands can only be executed by the admin!")
         else:
-            client.send(message.encode('utf-8'))
+            client.send(message.encode('ascii'))
 
 receive_thread = threading.Thread(target=receive)
 receive_thread.start()
