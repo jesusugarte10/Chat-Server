@@ -7,7 +7,7 @@ import threading
 
 stop_thread = False
 
-host = '35.237.108.170'
+host = '34.139.206.156'
 try:
     socket.inet_aton(host)
 except socket.error:

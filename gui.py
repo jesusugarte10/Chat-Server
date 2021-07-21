@@ -4,16 +4,14 @@
 import socket
 import threading 
 import tkinter
-import tkinter.scrolledtext
 from tkinter import simpledialog
 
-while True:
-    host = input('Enter ip address to connect\n') #ethernet
-    try:
-        socket.inet_aton(host)
-        break
-    except socket.error:
-        print('Invalid IP')
+host = '35.237.108.17'
+try:
+    socket.inet_aton(host)
+except socket.error:
+    print('Invalid IP')
+
 port = 50842                    
 print(f'Connected to: {host}')
 
