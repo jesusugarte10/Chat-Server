@@ -5,6 +5,7 @@ import socket
 import threading 
 import tkinter
 from tkinter import simpledialog
+from tkinter import scrolledtext
 
 host = '35.237.108.17'
 try:
@@ -44,7 +45,7 @@ class Client:
         self.chat_label.config(font=("Arial", 12))
         self.chat_label.pack(padx=20, pady=5)
 
-        self.text_area = tkinter.scrolledtext.ScrolledText(self.win)
+        self.text_area = scrolledtext.ScrolledText(self.win)
         self.text_area.pack(padx=20, pady=5)
         self.text_area.config(state='disabled')
 
