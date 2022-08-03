@@ -7,12 +7,12 @@ import threading
 
 stop_thread = False
 
-host = '34.139.206.156'
-try:
-    socket.inet_aton(host)
-except socket.error:
-    print('Invalid IP')
-    quit()
+host = 'raspberrypi.local'
+#try:
+    #socket.inet_aton(host)
+#except socket.error:
+    #print('Invalid IP')
+    #quit()
                     
 print(f'Connected to: {host}')
 
