@@ -7,7 +7,7 @@ import threading
 
 stop_thread = False
 
-host = 'raspberrypi.local'
+host = '127.0.0.1'
 #try:
     #socket.inet_aton(host)
 #except socket.error:
